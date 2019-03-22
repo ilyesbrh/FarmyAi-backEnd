@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 20, 2019 at 04:32 PM
+-- Generation Time: Mar 22, 2019 at 08:00 PM
 -- Server version: 10.1.9-MariaDB
 -- PHP Version: 5.6.15
 
@@ -28,14 +28,27 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `event` (
   `id` int(16) NOT NULL,
-  `userId` int(16) NOT NULL,
-  `moduleId` int(16) NOT NULL,
+  `userId` int(11) NOT NULL,
+  `moduleId` int(11) DEFAULT NULL,
   `class` varchar(10) NOT NULL,
+  `seen` tinyint(1) NOT NULL DEFAULT '0',
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `confidence` int(8) NOT NULL,
   `square` varchar(20) DEFAULT NULL,
   `imageURL` longtext
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `event`
+--
+
+INSERT INTO `event` (`id`, `userId`, `moduleId`, `class`, `seen`, `timestamp`, `confidence`, `square`, `imageURL`) VALUES
+(1, 0, NULL, 'animal', 0, '2019-03-22 00:10:09', 80, NULL, 'imageURL'),
+(5, 1, NULL, 'dog', 1, '2019-03-22 00:24:54', 40, NULL, 'urlimage12E'),
+(6, 1, NULL, 'cat', 0, '2019-03-22 00:25:10', 61, NULL, 'urlimage12E'),
+(7, 1, NULL, 'rat', 0, '2019-03-22 00:25:18', 61, NULL, 'urlimage12E'),
+(8, 1, NULL, 'python', 0, '2019-03-22 00:25:28', 61, NULL, 'urlimage12E'),
+(9, 1, NULL, 'rat', 0, '2019-03-22 00:25:49', 1, NULL, 'urlimage12E');
 
 -- --------------------------------------------------------
 
@@ -62,6 +75,13 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`id`, `username`, `password`) VALUES
+(1, 'ilies', '123456');
+
+--
 -- Indexes for dumped tables
 --
 
@@ -69,9 +89,7 @@ CREATE TABLE `user` (
 -- Indexes for table `event`
 --
 ALTER TABLE `event`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `user` (`userId`),
-  ADD UNIQUE KEY `module` (`moduleId`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `module`
@@ -94,7 +112,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `event`
 --
 ALTER TABLE `event`
-  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `module`
 --
@@ -104,18 +122,7 @@ ALTER TABLE `module`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT;
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `event`
---
-ALTER TABLE `event`
-  ADD CONSTRAINT `event_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `event_ibfk_2` FOREIGN KEY (`moduleId`) REFERENCES `module` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
+  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

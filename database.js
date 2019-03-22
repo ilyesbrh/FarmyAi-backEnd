@@ -85,10 +85,26 @@ function addEvent(event) {
     });
 
 }
+function markAsSeen(id) {
+
+    
+    let query = `UPDATE event SET seen = true WHERE id = ${id}`;
+
+    return new Promise(function (resolve, reject) {
+        connection.query(query, function (err, respTables) {
+            if (err) {
+                reject(err);
+            }
+            resolve(respTables);
+        });
+    });
+
+}
 
 module.exports = {
     connect: connect,
     getUser: getuserId,
     getEvents: getEvents,
-    PostEvent: addEvent
+    PostEvent: addEvent,
+    markAsSeen: markAsSeen
 }
