@@ -4,6 +4,7 @@ const getevents = require('../../database').getEvents;
 const MarkSeen = require('../../database').markAsSeen;
 const liveNotification = require('../../database').liveNotification;
 const getAnimalsStats = require('../../database').getAnimalsStats;
+const eventsCount = require('../../database').eventsCount;
 const postEvent = require('../../database').PostEvent;
 const multer = require('multer');
 const upload = multer()
@@ -18,6 +19,23 @@ router.get('/', (req, res, next) => {
     console.log(req.params);
 
     getevents(userId, offset, limit)
+        .then((value) => {
+
+            res.status(200).json(value);
+
+        })
+        .catch((err) => {
+            console.log(err.message);
+
+        });
+});
+
+//get event counts
+router.get('/count/:id', (req, res, next) => {
+
+    userId = req.params.id;
+
+    eventsCount(userId)
         .then((value) => {
 
             res.status(200).json(value);

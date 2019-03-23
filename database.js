@@ -114,6 +114,20 @@ function liveNotification(id) {
     });
 
 }
+function eventsCount(id) {
+
+    let query = `SELECT count(id) as count FROM event WHERE userId = ${id}`;
+
+    return new Promise(function (resolve, reject) {
+        connection.query(query, function (err, respTables) {
+            if (err) {
+                reject(err);
+            }
+            resolve(respTables[0].count);
+        });
+    });
+
+}
 function appearance(id) {
 
     let query = `SELECT class , COUNT(class) as appear FROM event WHERE userId = ${id} GROUP BY class LIMIT 4`;
@@ -134,6 +148,7 @@ module.exports = {
     getUser: getuserId,
     getEvents: getEvents,
     PostEvent: addEvent,
+    eventsCount: eventsCount,
     liveNotification: liveNotification,
     getAnimalsStats: appearance,
     markAsSeen: markAsSeen
