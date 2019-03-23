@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const getevents = require('../../database').getEvents;
 const MarkSeen = require('../../database').markAsSeen;
+const liveNotification = require('../../database').liveNotification;
 const postEvent = require('../../database').PostEvent;
 const multer = require('multer');
 const upload = multer()
@@ -33,7 +34,7 @@ router.patch('/markSeen/:id', (req, res) => {
     MarkSeen(req.params.id).then((_) => {
 
         res.status(200).json({});
-    })
+    });
 });
 
 //get user notification if it occurs
@@ -41,8 +42,10 @@ router.get('/notification/:id', (req, res) => {
 
     const id = req.params.id;
 
-    res.status(200).json({ message: id });
+    liveNotification(req.params.id).then((notification) => {
 
+        res.status(200).json(notification);
+    })
 });
 
 //post notification from module

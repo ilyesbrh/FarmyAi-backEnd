@@ -100,11 +100,26 @@ function markAsSeen(id) {
     });
 
 }
+function liveNotification(id) {
+
+    let query = `SELECT * FROM event WHERE timestamp > (NOW() - INTERVAL 1 MINUTE) AND userId = ${id}`;
+
+    return new Promise(function (resolve, reject) {
+        connection.query(query, function (err, respTables) {
+            if (err) {
+                reject(err);
+            }
+            resolve(respTables);
+        });
+    });
+
+}
 
 module.exports = {
     connect: connect,
     getUser: getuserId,
     getEvents: getEvents,
     PostEvent: addEvent,
+    liveNotification: liveNotification,
     markAsSeen: markAsSeen
 }
