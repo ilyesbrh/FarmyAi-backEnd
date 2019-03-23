@@ -114,6 +114,20 @@ function liveNotification(id) {
     });
 
 }
+function appearance(id) {
+
+    let query = `SELECT class , COUNT(class) as appear FROM event WHERE userId = ${id} GROUP BY class LIMIT 4`;
+
+    return new Promise(function (resolve, reject) {
+        connection.query(query, function (err, respTables) {
+            if (err) {
+                reject(err);
+            }
+            resolve(respTables);
+        });
+    });
+
+}
 
 module.exports = {
     connect: connect,
@@ -121,5 +135,6 @@ module.exports = {
     getEvents: getEvents,
     PostEvent: addEvent,
     liveNotification: liveNotification,
+    getAnimalsStats: appearance,
     markAsSeen: markAsSeen
 }
