@@ -73,7 +73,7 @@ function addEvent(event) {
 
     
     let query = `INSERT INTO event (userId, moduleId, class, seen, confidence, imageURL)
-                VALUES (${event.userId},${event.moduleId},'${event.class}',${false},${event.confidence},'${event.imageURL})'`;
+                VALUES (${event.userId},null,'${event.class}',${false},${event.confidence},'${event.imageUrl}')`;
 
     return new Promise(function (resolve, reject) {
         connection.query(query, function (err, respTables) {

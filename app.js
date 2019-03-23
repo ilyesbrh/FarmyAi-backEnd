@@ -12,6 +12,7 @@ const moduleRoutes = require('./api/routes/module');
 connect(); // call to connect function in database.js
 
 app.use(morgan('dev'));
+app.use(express.static('images'));
 app.use(bodyparser.urlencoded({ extended: false }));
 app.use(bodyparser.json());
 app.use(cors());

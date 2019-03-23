@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 const getevents = require('../../database').getEvents;
 const MarkSeen = require('../../database').markAsSeen;
-
+const postEvent = require('../../database').PostEvent;
+const multer = require('multer');
+const upload = multer()
 
 //get all events
 router.get('/', (req, res, next) => {
@@ -21,14 +23,14 @@ router.get('/', (req, res, next) => {
         })
         .catch((err) => {
             console.log(err.message);
-            
+
         });
 });
 
 //get user events
 router.patch('/markSeen/:id', (req, res) => {
-    
-    MarkSeen(req.params.id).then((_)=>{
+
+    MarkSeen(req.params.id).then((_) => {
 
         res.status(200).json({});
     })
@@ -44,9 +46,36 @@ router.get('/notification/:id', (req, res) => {
 });
 
 //post notification from module
-router.post('/notification', (req, res) => {
+router.post('/notification', upload.single('image'), (req, res, next) => {
 
+    console.log(req.file);
+    let imageName =Date.now().toString()+req.body.userId+ "." + req.file.mimetype.split("/")[1];
+    let imageUrl = "./images/" + imageName;
+    console.log('image url link'+ imageUrl);
+    
+    var fs = require('fs');
+    var stream = fs.createWriteStream(imageUrl);
+    stream.once('open', function (fd) {
+        stream.write(req.file.buffer);
+        stream.end();
+    });
 
+    postEvent(
+        {
+            userId: req.body.userId,
+            class: req.body.class,
+            confidence: req.body.confidence,
+            imageUrl: imageName
+        }
+    ).then((_) => {
+        res.status(201).send();
+    }).catch((_) => {
+        console.log(_);
+        
+        const error = new Error('cant create it');
+        error.status = 404;
+        next(error);
+    })
 });
 
 module.exports = router;
