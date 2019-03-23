@@ -32,6 +32,18 @@ function connect() {
 //new Date().toISOString().slice(0, 19).replace('T', ' '); date to mysql Date
 //().format('YYYY-MM-DD HH:mm:ss');
 
+function geteventsAll(id){
+    let query = `select * from event where userId = ${id} ORDER BY timestamp DESC`;
+
+    return new Promise(function (resolve, reject) {
+        connection.query(query, function (err, respTables) {
+            if (err) {
+                reject(err);
+            }
+            resolve(respTables);
+        });
+    });
+}
 
 
 /**
@@ -57,7 +69,7 @@ function getuserId(user) {
 
 function getEvents(id,offset,limit) {
 
-    let query = `select * from event where userId = ${id} ORDER BY timestamp DESC  LIMIT ${offset}, ${limit}`;
+    let query = `select * from event where userId = ${id} ORDER BY timestamp DESC  LIMIT ${offset}, ${limit} `;
 
     return new Promise(function (resolve, reject) {
         connection.query(query, function (err, respTables) {
@@ -148,6 +160,7 @@ module.exports = {
     getUser: getuserId,
     getEvents: getEvents,
     PostEvent: addEvent,
+    AllEvent: geteventsAll,
     eventsCount: eventsCount,
     liveNotification: liveNotification,
     getAnimalsStats: appearance,
